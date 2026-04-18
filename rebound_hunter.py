@@ -8,7 +8,6 @@ from zoneinfo import ZoneInfo
 from datetime import datetime
 from utils import is_excluded, calculate_score
 from strategy_params import calc_rebound_levels
-from claude_comment import generate_comments_batch
 
 DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK")
 PAT_TOKEN = os.environ.get("PAT_TOKEN")
@@ -105,9 +104,6 @@ def main():
     now_jst = datetime.now(tz=ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d %H:%M JST")
 
     if picks:
-        print("💬 Claude APIコメント生成中...")
-        picks = generate_comments_batch(picks, max_count=5)
-
         msg = (
             f"🔄 **Rebound Hunter — {phase}フェーズ検知**\n"
             f"┗ 候補銘柄トップ{len(picks)}件\n"
@@ -118,11 +114,8 @@ def main():
                 f"**{i}. {p['ticker']} {p['name']}**（Score: {p['score']}点）\n"
                 f"　 終値: {p['close']}円 | RSI: {p['rsi']} | MA25乖離: {p['dev_pct']}% | 出来高: {p['vol_ratio']}倍\n"
                 f"　 📌 エントリー: {p['entry']}円 | 🛑 損切: {p['stop_loss']}円\n"
-                f"　 🎯 翌日目標: {p['target_1d']}円 / 翌週目標: {p['target_5d']}円\n"
+                f"　 🎯 翌日目標: {p['target_1d']}円 / 翌週目標: {p['target_5d']}円\n\n"
             )
-            if p.get("comment"):
-                msg += f"　 💬 {p['comment']}\n"
-            msg += "\n"
         msg += f"🕒 {now_jst}"
         notify_discord(msg)
         print(msg)

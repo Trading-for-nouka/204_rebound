@@ -15,12 +15,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install yfinance pandas pandas_ta requests anthropic
+      - run: pip install yfinance pandas pandas_ta requests
       - name: Run Scanner
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python rebound_hunter.py
       - name: Commit selected_positions_rebound.json
         run: |
