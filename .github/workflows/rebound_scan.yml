@@ -1,8 +1,8 @@
 name: Rebound Scanner
 
 on:
-  schedule:
-    - cron: '30 7 * * 1-5'  # 平日 16:30 JST
+  #schedule:
+    #- cron: '30 7 * * 1-5'  # 平日 16:30 JST
   workflow_dispatch:
 
 jobs:
