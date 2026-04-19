@@ -105,24 +105,16 @@ def main():
 
     if picks:
         msg = (
-            f"🔄 **Rebound Hunter — {phase}フェーズ検知**
-"
-            f"┗ 候補銘柄トップ{len(picks)}件
-"
-            f"━━━━━━━━━━━━━━━━━━━━
-"
+            f"🔄 **Rebound Hunter — {phase}フェーズ検知**\n"
+            f"┗ 候補銘柄トップ{len(picks)}件\n"
+            f"━━━━━━━━━━━━━━━━━━━━\n"
         )
         for i, p in enumerate(picks, 1):
             msg += (
-                f"**{i}. {p['ticker']} {p['name']}**（Score: {p['score']}点）
-"
-                f"　 終値: {p['close']}圆 | RSI: {p['rsi']} | MA25乖離: {p['dev_pct']}% | 出来高: {p['vol_ratio']}倍
-"
-                f"　 📌 エントリー: {p['entry']}圆 | 🛑 損切: {p['stop_loss']}圆
-"
-                f"　 🎯 翔日目標: {p['target_1d']}圆 / 翔週目標: {p['target_5d']}圆
-
-"
+                f"**{i}. {p['ticker']} {p['name']}**（Score: {p['score']}点）\n"
+                f"　 終値: {p['close']}円 | RSI: {p['rsi']} | MA25乖離: {p['dev_pct']}% | 出来高: {p['vol_ratio']}倍\n"
+                f"　 📌 エントリー: {p['entry']}円 | 🛑 損切: {p['stop_loss']}円\n"
+                f"　 🎯 翌日目標: {p['target_1d']}円 / 翌週目標: {p['target_5d']}円\n\n"
             )
         msg += f"🕒 {now_jst}"
         notify_discord(msg)
@@ -130,16 +122,12 @@ def main():
 
         for p in picks[:5]:
             notify_discord(
-                f"🛒 **{p['name']}（{p['ticker']}）**
-"
-                f"　 📌 {p['entry']}圆 | 🛑 {p['stop_loss']}圆
-"
-                f"📦 {p['ticker']}|rebound|{p['entry']}|{p['stop_loss']}|{p['name']}"
+                f"🛒 **{p['name']}（{p['ticker']}）**\n"
+                f"　 📌 {p['entry']}円 | 🛑 {p['stop_loss']}円\n"
+                f"📎 {p['ticker']}|rebound|{p['entry']}|{p['stop_loss']}|{p['name']}"
             )
     else:
-        msg = f"🔄 **Rebound Hunter — {phase}フェーズ**
-候補銘柄なし（スコア60点以上なし）
-🕒 {now_jst}"
+        msg = f"🔄 **Rebound Hunter — {phase}フェーズ**\n候補銘柄なし（スコア60点以上なし）\n🕒 {now_jst}"
         notify_discord(msg)
         print(msg)
 
