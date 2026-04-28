@@ -90,8 +90,9 @@ def monitor():
     for p in positions:
         ticker = p["ticker"]
         name = ticker_to_name.get(ticker, p.get("name", "不明"))
-        entry_price = p["entry_price"]
-        entry_date = datetime.strptime(p["entry_date"], "%Y-%m-%d")
+        entry_price = p.get("entry_price") or p.get("entry")
+        entry_date_str = p.get("entry_date", datetime.now().strftime("%Y-%m-%d"))
+        entry_date  = datetime.strptime(entry_date_str, "%Y-%m-%d")
         days_held = len(pd.bdate_range(start=entry_date, end=datetime.now())) - 1
 
         df = yf.download(ticker, period="60d", progress=False, auto_adjust=True)
