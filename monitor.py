@@ -68,7 +68,12 @@ def monitor():
             positions = json.load(f)
         # dict形式（{"ticker": {...}}）をリスト形式に変換
         if isinstance(positions, dict):
-            positions = [{"ticker": k, **v} for k, v in positions.items()]
+            if "ticker" in positions:
+                # 単一ポジションが平坦なdictで保存されている場合
+                positions = [positions]
+            else:
+                # {"1332.T": {...}, ...} の入れ子dict形式の場合
+                positions = [{"ticker": k, **v} for k, v in positions.items() if isinstance(v, dict)]
           
     except (json.JSONDecodeError, ValueError):
         print("ℹ️ positions.json が空または不正です。スキップします。")
