@@ -66,6 +66,10 @@ def monitor():
     try:
         with open(POS_FILE, "r", encoding="utf-8") as f:
             positions = json.load(f)
+        # dict形式（{"ticker": {...}}）をリスト形式に変換
+        if isinstance(positions, dict):
+            positions = [{"ticker": k, **v} for k, v in positions.items()]
+          
     except (json.JSONDecodeError, ValueError):
         print("ℹ️ positions.json が空または不正です。スキップします。")
         return
