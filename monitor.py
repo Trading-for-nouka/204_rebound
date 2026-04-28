@@ -26,7 +26,8 @@ def is_earnings_tomorrow(ticker):
             earnings_date = earnings_date.date()
         tomorrow = (datetime.now() + timedelta(days=1)).date()
         return earnings_date == tomorrow
-    except:
+    except Exception as e:
+        print(f"⚠️ 決算日チェックエラー ({ticker}): {e}")
         return False
 
 
@@ -42,7 +43,8 @@ def get_market_phase():
         response = requests.get(url, headers=headers, timeout=10)
         if response.status_code == 200:
             return response.json().get("phase", "NEUTRAL")
-    except: pass
+    except Exception as e:
+        print(f"⚠️ 市場フェーズ取得エラー: {e}")
     return "NEUTRAL"
 
 DISCORD_WEBHOOK = os.environ.get("DISCORD_WEBHOOK")
@@ -81,7 +83,7 @@ def monitor():
         name = ticker_to_name.get(ticker, p.get("name", "不明"))
         entry_price = p["entry_price"]
         entry_date = datetime.strptime(p["entry_date"], "%Y-%m-%d")
-        days_held = (datetime.now() - entry_date).days
+        days_held = len(pd.bdate_range(start=entry_date, end=datetime.now())) - 1
 
         df = yf.download(ticker, period="60d", progress=False, auto_adjust=True)
         if df.empty: continue
